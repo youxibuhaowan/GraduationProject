@@ -9,8 +9,7 @@ import database
 from database import db_session_factory
 from models import Stock_basic, Trade_cal, Daily, Daily_basic, Monthly, Weekly, Moneyflow
 
-
-def print_stock_company():
+def print_stock_basic():
     # 获取所有部门信息
     session = db_session_factory()
     depts = session.query(Stock_basic).all()
@@ -31,7 +30,6 @@ def print_daily():
     return {'ts_code': '10000', 'depts': depts}
 
 
-# @app.get('/tushare/daily_basic')
 def print_daily_basic():
     # 获取所有部门信息
     session = db_session_factory()
@@ -39,7 +37,6 @@ def print_daily_basic():
     return {'ts_code': '10000', 'depts': depts}
 
 
-# @app.get('/tushare/monthly')
 def print_monthly():
     # 获取所有部门信息
     session = db_session_factory()
@@ -47,7 +44,6 @@ def print_monthly():
     return {'ts_code': '10000', 'depts': depts}
 
 
-# @app.get('/tushare/weekly')
 def print_weekly():
     # 获取所有部门信息
     session = db_session_factory()
@@ -55,7 +51,6 @@ def print_weekly():
     return {'ts_code': '10000', 'depts': depts}
 
 
-# @app.get('/tushare/moneyflow')
 def print_moneyflow():
     # 获取所有部门信息
     session = db_session_factory()
@@ -63,7 +58,7 @@ def print_moneyflow():
     return {'ts_code': '10000', 'depts': depts}
 
 
-def insert_stock_company(stock_basic: Stock_basic):
+def insert_stock_basic(stock_basic: Stock_basic):
     # 新增数据
     try:
         session = db_session_factory()
@@ -106,7 +101,9 @@ def insert_daily_basic(daily_basic: Daily_basic):
         session.add(daily_basic)
         session.commit()
         return {'code': '成功'}
-    except:
+    except Exception as err:
+        print(err)
+        # raise err
         session.rollback()
         return {'code': '失败'}
 
@@ -130,7 +127,8 @@ def insert_weekly(weekly: Weekly):
         session.add(weekly)
         session.commit()
         return {'code': '成功'}
-    except:
+    except Exception as err:
+        print(err)
         session.rollback()
         return {'code': '失败'}
 

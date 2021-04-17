@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 # SQLALCHEMY_DATABASE_URL = "msyql://root:123456@localhost/tushare"
 SQLALCHEMY_DATABASE_URL = "mysql+pymysql://root:123456@localhost/tushare"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=False)
 # 获取数据库会话工厂(通过调用该对象就可以获得数据库会话对象)
 db_session_factory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

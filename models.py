@@ -20,6 +20,9 @@ class Stock_basic(Base):
     market = Column('market', String(255))
     list_date = Column('list_date', DATETIME)
 
+    def __repr__(self):
+        return self.ts_code
+
 
 class Trade_cal(Base):
     __tablename__ = 'tb_trade_cal'
@@ -32,7 +35,8 @@ class Trade_cal(Base):
 class Daily(Base):
     __tablename__ = 'tb_daily'
 
-    ts_code = Column('ts_code', String(255), primary_key=True)
+    index = Column('index', INT, primary_key=True)
+    ts_code = Column('ts_code', String(255))
     stade_date = Column('stade_date', DATETIME)
     open = Column('open', DECIMAL)
     high = Column('high', DECIMAL)
@@ -48,9 +52,10 @@ class Daily(Base):
 class Daily_basic(Base):
     __tablename__ = 'tb_daily_basic'
 
-    ts_code = Column('ts_code', String(255), primary_key=True)
+    index = Column('index', INT, primary_key=True)
+    ts_code = Column('ts_code', String(255))
     trade_date = Column('trade_date', DATETIME)
-    colse = Column('colse', DECIMAL)
+    close = Column('close', DECIMAL)
     turnover_rate = Column('turnover_rate', DECIMAL)
     turnover_rate_f = Column('turnover_rate_f', DECIMAL)
     volume_ratio = Column('volume_ratio', DECIMAL)
@@ -70,7 +75,8 @@ class Daily_basic(Base):
 class Monthly(Base):
     __tablename__ = 'tb_monthly'
 
-    ts_code = Column('ts_code', String(255), primary_key=True)
+    index = Column('index', INT, primary_key=True)
+    ts_code = Column('ts_code', String(255))
     trade_date = Column('trade_date', DATETIME)
     open = Column('open', DECIMAL)
     high = Column('high', DECIMAL)
@@ -86,7 +92,8 @@ class Monthly(Base):
 class Weekly(Base):
     __tablename__ = 'tb_weekly'
 
-    ts_code = Column('ts_code', String(255), primary_key=True)
+    index = Column('index', INT, primary_key=True)
+    ts_code = Column('ts_code', String(255))
     trade_date = Column('trade_date', DATETIME)
     open = Column('open', DECIMAL)
     high = Column('high', DECIMAL)
