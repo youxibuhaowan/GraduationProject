@@ -4,9 +4,7 @@ Author:中庸猿
 奋斗不止，赚钱不停    
 """
 
-import models
 import function
-import pymysql
 
 stock_list = function.print_stock_basic()['depts']
 # 拿取每个股票的日线，周线，月线 ---> 开盘价，收盘价，最高价，最低价 ---> 创建成视图

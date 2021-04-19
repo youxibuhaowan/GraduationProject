@@ -3,10 +3,10 @@ Time:2021/4/15 19:28
 Author:中庸猿
 奋斗不止，赚钱不停    
 """
+import MySQLdb
 import uvicorn
 from datetime import datetime, date
 import json
-import pymysql
 import database
 from database import db_session_factory
 from models import Stock_basic, Trade_cal, Daily, Daily_basic, Monthly, Weekly, Moneyflow
@@ -151,7 +151,7 @@ def insert_moneyflow(moneyflow: Moneyflow):
 def execution_mysql(mysql_sentence: str, b=None, host='127.0.0.1', port=3306, user='root', password='123456',
                               database='tushare', charset='utf8mb4'):
     # 第一步: 创建链接对象
-    conn = pymysql.connect(host=host, port=port,
+    conn = MySQLdb.connect(host=host, port=port,
                            user=user, password=password,
                            database=database, charset=charset)
     try:
@@ -170,7 +170,7 @@ def execution_mysql(mysql_sentence: str, b=None, host='127.0.0.1', port=3306, us
             print('执行成功')
 
 
-    except pymysql.MySQLError as err:
+    except MySQLdb.MySQLError as err:
         print(err)
         conn.rollback()
         return 0
@@ -201,7 +201,7 @@ def interface_mysql(table='tb_daily', ts_code='600000.SH', page = 1, host='127.0
 
     # sql = "select `stade_date`, `open`, `close`, `high`, `low` from `tb_daily` where ts_code = '600000.SH' and  `index` < '10';"
     # vw = "vw_" + vw_date + "_" + vw
-    conn = pymysql.connect(host=host, port=port,
+    conn = MySQLdb.connect(host=host, port=port,
                            user=user, password=password,
                            database=database, charset=charset)
     try:
@@ -214,10 +214,11 @@ def interface_mysql(table='tb_daily', ts_code='600000.SH', page = 1, host='127.0
             print(result)
             print('执行成功')
             return result
-    except pymysql.MySQLError as err:
+    except MySQLdb.MySQLError as err:
         print(err)
         conn.rollback()
         return 0
     finally:
         conn.close()
-interface_mysql()
+
+# interface_mysql()

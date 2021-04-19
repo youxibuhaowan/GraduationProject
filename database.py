@@ -22,17 +22,3 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 db_session_factory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
-
-
-def get_db_session():
-    session = db_session_factory()
-    try:
-        yield session
-        session.commit()
-    except SQLAlchemyError as err:
-        print(err)
-        session.rollback()
-    finally:
-        session.close()
-
-

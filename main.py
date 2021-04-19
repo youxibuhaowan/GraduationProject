@@ -6,17 +6,27 @@ Author:中庸猿
 import uvicorn
 from fastapi import FastAPI, Depends
 from fastapi.params import Query
-from sqlalchemy.sql.elements import or_
-
-from database import  get_db_session, db_session_factory
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
-from models import Stock_basic, Trade_cal, Daily, Daily_basic, Monthly, Weekly, Moneyflow
 
 import function
-
 from database import db_session_factory
+from models import Daily
 
 app = FastAPI()
+
+
+def get_db_session():
+    session = db_session_factory()
+    try:
+        yield session
+        session.commit()
+    except SQLAlchemyError as err:
+        print(err)
+        session.rollback()
+    finally:
+        session.close()
+
 
 @app.get('/tushareone')
 def search(
@@ -26,15 +36,14 @@ def search(
         session: Session = Depends(get_db_session)
 ):
     query = session.query(Daily)\
-        .filter(Daily.index)\
-        .order_by(Daily.index.desc())
+        .order_by(Daily.index.desc()).all()
     if keyword:
-        print('none')
+        # print('none')
         # query = query.filter(or_(
         #     Daily.ts_code.contains
         # ))
+        pass
     return {'code': 10000, 'result': query}
-
 
 
 # 返回一个日期和一个成交额和成交量 ---> 日线，周线，月线 ---> 通过前端页面传递参数，页面的点击传递参数
@@ -61,4 +70,4 @@ def for_two_page(table='tb_daily_basic', ts_code='600000.SH'):
 
 
 if __name__ == '__main__':
-    uvicorn.run('main:app', host='0.0.0.0', reload=True)
+    uvicorn.run('main:app', reload=True)
