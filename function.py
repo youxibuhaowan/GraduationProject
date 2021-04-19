@@ -181,14 +181,20 @@ def execution_mysql(mysql_sentence: str, b=None, host='127.0.0.1', port=3306, us
 
 def interface_mysql(table='tb_daily', ts_code='600000.SH', page = 1, host='127.0.0.1', port=3306, user='root', password='123456',
                     database='tushare', charset='utf8mb4'):
+    index = 0
+    list_index = []
     if page == 1:
-        sql = "select `ts_code` `trade_date`, `vol`, `amount` from " + table + " where ts_code = '" + ts_code + "';"
+        sql = "select `trade_date` from " + table + " where ts_code = '" + ts_code + "';"
+        list_index.append(sql)
+        sql = "select `vol`, `amount` from " + table + " where ts_code = '" + ts_code + "';"
+        list_index.append(sql)
+        index = 2
     elif page == 2:
-        sql = "select `ts_code` `trade_date`, `open`, `close`, `high`, `low` from " + table + " where ts_code = '" + ts_code + "';"
+        sql = "select `ts_code`, `trade_date`, `open`, `close`, `high`, `low` from " + table + " where ts_code = '" + ts_code + "';"
     elif page == 3:
         pass
     elif page == 4:
-        sql = "select `ts_code` `trade_date`, `pe`, `pb` `ps` `dv_ttm` from " + table + " where ts_code = '" + ts_code + "';"
+        sql = "select `ts_code`, `trade_date`, `pe`, `pb` `ps` `dv_ttm` from " + table + " where ts_code = '" + ts_code + "';"
     else:
         print('我啥也不知道，这页面超了')
 
@@ -199,12 +205,13 @@ def interface_mysql(table='tb_daily', ts_code='600000.SH', page = 1, host='127.0
                            user=user, password=password,
                            database=database, charset=charset)
     try:
-        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+        with conn.cursor() as cursor:
+
             cursor.execute(sql)
             conn.commit()
             result = cursor.fetchall()
             # result = json.dumps(result)
-            # print(result)
+            print(result)
             print('执行成功')
             return result
     except pymysql.MySQLError as err:
