@@ -1,50 +1,53 @@
-{
-  "request_id": "74c079489f5411eb8df2b59dc8dd05a51618647064977270",
-  "code": 0,
-  "msg": "",
-  "data": {
-    "fields": [
-      "ts_code",
-      "trade_date",
-      "close",
-      "turnover_rate",
-      "turnover_rate_f",
-      "volume_ratio",
-      "pe",
-      "pe_ttm",
-      "pb",
-      "ps",
-      "ps_ttm",
-      "dv_ratio",
-      "dv_ttm",
-      "total_share",
-      "float_share",
-      "free_share",
-      "total_mv",
-      "circ_mv"
-    ],
-    "items": [
-      [
-        "600000.SH",
-        "20210416",
-        10.5400,
-        0.1121,
-        0.2144,
-        0.6700,
-        5.3043,
-        5.3043,
-        0.5887,
-        1.5753,
-        1.5753,
-        5.6926,
-        5.6926,
-        2935214.4412,
-        2935214.4412,
-        1534478.8902,
-        30937160.2102,
-        30937160.2102
-      ]
-    ],
-    "has_more": false
+[
+  {
+    'stade_date': datetime.datetime(2021,
+    4,
+    16,
+    0,
+    0),
+    'open': Decimal(
+    '10.450'
+    ),
+    'close': Decimal(
+    '10.540'
+    ),
+    'high': Decimal(
+    '10.550'
+    ),
+    'low': Decimal(
+    '10.420'
+    ),
+    'vol': Decimal(
+    '328956.240'
+    ),
+    'amount': Decimal(
+    '345237.987'
+    )
+  },
+  {
+    'stade_date': datetime.datetime(2021,
+    4,
+    15,
+    0,
+    0),
+    'open': Decimal(
+    '10.580'
+    ),
+    'close': Decimal(
+    '10.430'
+    ),
+    'high': Decimal(
+    '10.610'
+    ),
+    'low': Decimal(
+    '10.380'
+    ),
+    'vol': Decimal(
+    '531723.720'
+    ),
+    'amount': Decimal(
+    '555086.924'
+    )
   }
-}
+]
+

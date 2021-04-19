@@ -4,55 +4,57 @@ Author:中庸猿
 奋斗不止，赚钱不停    
 """
 import uvicorn
+from datetime import datetime, date
+import json
 import pymysql
 import database
 from database import db_session_factory
 from models import Stock_basic, Trade_cal, Daily, Daily_basic, Monthly, Weekly, Moneyflow
 
 def print_stock_basic():
-    # 获取所有部门信息
+    #
     session = db_session_factory()
     depts = session.query(Stock_basic).all()
     return {'ts_code': '10000', 'depts': depts}
 
 
 def print_trade_cal():
-    # 获取所有部门信息
+    #
     session = db_session_factory()
     depts = session.query(Trade_cal).all()
     return {'ts_code': '10000', 'depts': depts}
 
 
 def print_daily():
-    # 获取所有部门信息
+    #
     session = db_session_factory()
     depts = session.query(Daily).all()
     return {'ts_code': '10000', 'depts': depts}
 
 
 def print_daily_basic():
-    # 获取所有部门信息
+    #
     session = db_session_factory()
     depts = session.query(Daily_basic).all()
     return {'ts_code': '10000', 'depts': depts}
 
 
 def print_monthly():
-    # 获取所有部门信息
+    #
     session = db_session_factory()
     depts = session.query(Monthly).all()
     return {'ts_code': '10000', 'depts': depts}
 
 
 def print_weekly():
-    # 获取所有部门信息
+    #
     session = db_session_factory()
     depts = session.query(Weekly).all()
     return {'ts_code': '10000', 'depts': depts}
 
 
 def print_moneyflow():
-    # 获取所有部门信息
+    #
     session = db_session_factory()
     depts = session.query(Moneyflow).all()
     return {'ts_code': '10000', 'depts': depts}
@@ -143,3 +145,72 @@ def insert_moneyflow(moneyflow: Moneyflow):
     except:
         session.rollback()
         return {'code': '失败'}
+
+
+# 连接数据库的函数,执行SQL语句
+def execution_mysql(mysql_sentence: str, b=None, host='127.0.0.1', port=3306, user='root', password='123456',
+                              database='tushare', charset='utf8mb4'):
+    # 第一步: 创建链接对象
+    conn = pymysql.connect(host=host, port=port,
+                           user=user, password=password,
+                           database=database, charset=charset)
+    try:
+        # 第二步: 获取游标对象
+        with conn.cursor() as cursor:
+            # 第三步: 通过游标对象向数据库服务器发出SQL语句
+            # cursor.execute('SQL语句')
+            affected_rows = cursor.execute(mysql_sentence, b)
+            # 第四步: 获取查询结果（通过游标抓取数据）
+            # fetchone() ---> 抓取一条数据
+            # fetchall() ---> 抓取所有数据，嵌套元组
+            # fetchmany(n) ---> 抓取n个数据，嵌套元组
+            # row = cursor.fetchall()  # 抓取出来是一个二维元组
+            # return row
+            conn.commit()
+            print('执行成功')
+
+
+    except pymysql.MySQLError as err:
+        print(err)
+        conn.rollback()
+        return 0
+    finally:
+        # 第五步: 关闭连接释放资源
+        conn.close()
+
+
+def interface_mysql(table='tb_daily', ts_code='600000.SH', page = 1, host='127.0.0.1', port=3306, user='root', password='123456',
+                    database='tushare', charset='utf8mb4'):
+    if page == 1:
+        sql = "select `ts_code` `trade_date`, `vol`, `amount` from " + table + " where ts_code = '" + ts_code + "';"
+    elif page == 2:
+        sql = "select `ts_code` `trade_date`, `open`, `close`, `high`, `low` from " + table + " where ts_code = '" + ts_code + "';"
+    elif page == 3:
+        pass
+    elif page == 4:
+        sql = "select `ts_code` `trade_date`, `pe`, `pb` `ps` `dv_ttm` from " + table + " where ts_code = '" + ts_code + "';"
+    else:
+        print('我啥也不知道，这页面超了')
+
+
+    # sql = "select `stade_date`, `open`, `close`, `high`, `low` from `tb_daily` where ts_code = '600000.SH' and  `index` < '10';"
+    # vw = "vw_" + vw_date + "_" + vw
+    conn = pymysql.connect(host=host, port=port,
+                           user=user, password=password,
+                           database=database, charset=charset)
+    try:
+        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(sql)
+            conn.commit()
+            result = cursor.fetchall()
+            # result = json.dumps(result)
+            # print(result)
+            print('执行成功')
+            return result
+    except pymysql.MySQLError as err:
+        print(err)
+        conn.rollback()
+        return 0
+    finally:
+        conn.close()
+interface_mysql()

@@ -37,7 +37,7 @@ class Daily(Base):
 
     index = Column('index', INT, primary_key=True)
     ts_code = Column('ts_code', String(255))
-    stade_date = Column('stade_date', DATETIME)
+    trade_date = Column('trade_date', DATETIME)
     open = Column('open', DECIMAL)
     high = Column('high', DECIMAL)
     low = Column('low', DECIMAL)
