@@ -3,7 +3,7 @@ Time:2021/4/17 11:59
 Author:中庸猿
 奋斗不止，赚钱不停    
 """
-from sqlalchemy import Column, String, DATETIME, DECIMAL, INT
+from sqlalchemy import Column, String, DATETIME, DECIMAL, INT, Integer
 
 from database import Base
 
@@ -35,24 +35,38 @@ class Trade_cal(Base):
 class Daily(Base):
     __tablename__ = 'tb_daily'
 
-    index = Column('index', INT, primary_key=True)
-    ts_code = Column('ts_code', String(255))
-    trade_date = Column('trade_date', DATETIME)
-    open = Column('open', DECIMAL)
-    high = Column('high', DECIMAL)
-    low = Column('low', DECIMAL)
-    close = Column('close', DECIMAL)
-    pre_close = Column('pre_close', DECIMAL)
-    change = Column('change', DECIMAL)
-    pct_chg= Column('pct_chg', DECIMAL)
-    vol = Column('vol', DECIMAL)
-    amount = Column('amount', DECIMAL)
+    index = Column(INT, primary_key=True)
+    ts_code = Column(String(255))
+    trade_date = Column(DATETIME)
+    open = Column(DECIMAL)
+    high = Column(DECIMAL)
+    low = Column(DECIMAL)
+    close = Column(DECIMAL)
+    pre_close = Column(DECIMAL)
+    change = Column(DECIMAL)
+    pct_chg= Column(DECIMAL)
+    vol = Column(DECIMAL)
+    amount = Column(DECIMAL)
+
+    # index = Column('index', INT, primary_key=True)
+    # ts_code = Column('ts_code', String(255))
+    # trade_date = Column('trade_date', DATETIME)
+    # open = Column('open', DECIMAL)
+    # high = Column('high', DECIMAL)
+    # low = Column('low', DECIMAL)
+    # close = Column('close', DECIMAL)
+    # pre_close = Column('pre_close', DECIMAL)
+    # change = Column('change', DECIMAL)
+    # pct_chg = Column('pct_chg', DECIMAL)
+    # vol = Column('vol', DECIMAL)
+    # amount = Column('amount', DECIMAL)
+
 
 
 class Daily_basic(Base):
     __tablename__ = 'tb_daily_basic'
 
-    index = Column('index', INT, primary_key=True)
+    index = Column('index', Integer, primary_key=True)
     ts_code = Column('ts_code', String(255))
     trade_date = Column('trade_date', DATETIME)
     close = Column('close', DECIMAL)
@@ -75,7 +89,7 @@ class Daily_basic(Base):
 class Monthly(Base):
     __tablename__ = 'tb_monthly'
 
-    index = Column('index', INT, primary_key=True)
+    index = Column('index', Integer, primary_key=True)
     ts_code = Column('ts_code', String(255))
     trade_date = Column('trade_date', DATETIME)
     open = Column('open', DECIMAL)
@@ -92,7 +106,7 @@ class Monthly(Base):
 class Weekly(Base):
     __tablename__ = 'tb_weekly'
 
-    index = Column('index', INT, primary_key=True)
+    index = Column('index', Integer, primary_key=True)
     ts_code = Column('ts_code', String(255))
     trade_date = Column('trade_date', DATETIME)
     open = Column('open', DECIMAL)

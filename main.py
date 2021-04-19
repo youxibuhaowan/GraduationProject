@@ -6,8 +6,9 @@ Author:中庸猿
 import uvicorn
 from fastapi import FastAPI, Depends
 from fastapi.params import Query
+from sqlalchemy.sql.elements import or_
 
-from database import db_session_factory  , get_db_session
+from database import  get_db_session, db_session_factory
 from sqlalchemy.orm import Session
 from models import Stock_basic, Trade_cal, Daily, Daily_basic, Monthly, Weekly, Moneyflow
 
@@ -17,6 +18,22 @@ from database import db_session_factory
 
 app = FastAPI()
 
+@app.get('/tushareone')
+def search(
+        page: int = Query(1, gt=0),
+        size: int = Query(50, ge=5, le=50),
+        keyword: str = Query(None),
+        session: Session = Depends(get_db_session)
+):
+    query = session.query(Daily)\
+        .filter(Daily.index)\
+        .order_by(Daily.index.desc())
+    if keyword:
+        print('none')
+        # query = query.filter(or_(
+        #     Daily.ts_code.contains
+        # ))
+    return {'code': 10000, 'result': query}
 
 
 
