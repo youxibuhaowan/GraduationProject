@@ -46,15 +46,35 @@ def search(
         keyword: str = Query(None),
         session: Session = Depends(get_db_session)
 ):
-    query = session.query(Daily)\
-        .order_by(Daily.index.desc()).all()
-    if keyword:
-        # print('none')
-        # query = query.filter(or_(
-        #     Daily.ts_code.contains
-        # ))
-        pass
-    return {'code': 10000, 'result': query}
+    result1 = session.execute(
+        "select `trade_date` as date, vol  from `tb_daily` where `ts_code` = '600000.SH' order by `date` asc;"
+    )
+    result2 = session.execute(
+        "select `trade_date` as date, vol  from `tb_weekly` where `ts_code` = '600000.SH' order by `date` asc;"
+    )
+    result3 = session.execute(
+        "select `trade_date` as date, vol  from `tb_monthly` where `ts_code` = '600000.SH' order by `date` asc;"
+    )
+    day_x_data, day_y_data, week_x_data, week_y_data, month_x_data, month_y_data = [], [], [], [], [], []
+    for date, vol in result1.fetchall():
+        day_x_data.append(date)
+        day_y_data.append(vol)
+    for date, vol in result2.fetchall():
+        week_x_data.append(date)
+        week_y_data.append(vol)
+    for date, vol in result3.fetchall():
+        month_x_data.append(date)
+        month_y_data.append(vol)
+        # z_data.append(amount)
+    # query = session.query(Daily)\
+    #     .order_by(Daily.index.desc()).all()
+    # if keyword:
+    #     # print('none')
+    #     # query = query.filter(or_(
+    #     #     Daily.ts_code.contains
+    #     # ))
+    #     pass
+    return {'dayxData': day_x_data, 'dayyData': day_y_data, 'weekxData': week_x_data, 'weekyData': week_y_data, 'monthxData': month_x_data, 'monthyData': month_y_data}
 
 
 # 返回一个日期和一个成交额和成交量 ---> 日线，周线，月线 ---> 通过前端页面传递参数，页面的点击传递参数
