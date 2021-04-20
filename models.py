@@ -86,6 +86,18 @@ class Daily_basic(Base):
     total_mv = Column('total_mv', DECIMAL)
     circ_mv = Column('circ_mv', DECIMAL)
 
+
+class TradingLimit(Base):
+    __tablename__ = 'tb_trading_limit'
+
+    index = Column('index', Integer, primary_key=True)
+    ts_code = Column('ts_code', String(255))
+    trade_date = Column('trade_date', DATETIME)
+    pre_close = Column('pre_close', DECIMAL)
+    up_limit = Column('up_limit', DECIMAL)
+    down_limit = Column('down_limit', DECIMAL)
+
+
 class Monthly(Base):
     __tablename__ = 'tb_monthly'
 

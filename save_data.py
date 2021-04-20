@@ -178,3 +178,41 @@ def save_daily_SSE_50(SSE_50):
 
     # "ts_code", "trade_date", "open", "high", "low", "close", "pre_close", "change", "pct_chg", "vol", "amount"
 # save_daily_SSE_50(SSE_50)
+
+
+def save_trading_limit_SSE_50(SSE_50):
+    with ThreadPoolExecutor(max_workers=100) as pool:
+        for i in SSE_50:
+            # time.sleep(1)
+            params_daily = {
+                "ts_code": str(i),
+                "start_date": "20200101",
+                "end_date": "20210416"
+            }
+            json_trading_limit = {
+                "api_name": "stk_limit",
+                "token": token,
+                "params": params_daily,
+                "fields": "trade_date, ts_code, pre_close, up_limit, down_limit"
+            }
+            response = requests.post(url=url, json=json_trading_limit)
+
+            # number += 1
+            # print(number)
+            # print(response.text)
+            # if not number % 499:
+            #     time.sleep(100)
+
+            data = response.json()['data']['items']
+            print(data)
+            lensth2 = len(data)
+
+            for j in range(lensth2):
+                d1 = models.TradingLimit(trade_date=data[j][0], ts_code=data[j][1], pre_close=data[j][2], up_limit=data[j][3],
+                                  down_limit=data[j][4])
+                # function.insert_daily(daily=d1)
+                pool.submit(function.insert_trading_limit, d1)
+
+    print('完成')
+
+save_trading_limit_SSE_50(SSE_50)

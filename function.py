@@ -9,7 +9,7 @@ from datetime import datetime, date
 import json
 import database
 from database import db_session_factory
-from models import Stock_basic, Trade_cal, Daily, Daily_basic, Monthly, Weekly, Moneyflow
+from models import Stock_basic, Trade_cal, Daily, Daily_basic, Monthly, Weekly, Moneyflow, TradingLimit
 
 def print_stock_basic():
     #
@@ -89,6 +89,17 @@ def insert_daily(daily: Daily):
     try:
         session = db_session_factory()
         session.add(daily)
+        session.commit()
+        return {'code': '成功'}
+    except:
+        session.rollback()
+        return {'code': '失败'}
+
+def insert_trading_limit(trading_limit: TradingLimit):
+    # 新增数据
+    try:
+        session = db_session_factory()
+        session.add(trading_limit)
         session.commit()
         return {'code': '成功'}
     except:
