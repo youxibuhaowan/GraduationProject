@@ -4,15 +4,14 @@ Author:中庸猿
 奋斗不止，赚钱不停    
 """
 import uvicorn
+from concurrent.futures.thread import ThreadPoolExecutor
 from fastapi import FastAPI, Depends
 from fastapi.params import Query
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
-
 import function
 from database import db_session_factory
 from models import Daily
-
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -25,6 +24,19 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*']
 )
+
+# 判断接受到的参数是一个股票代码还是一个股票的名字
+def ts_code_or_name(a):
+    for i in a:
+        if not ('0' <= i <= '9'):
+            return a
+        b = int(a)
+
+    if b > 300983:
+        a += '.SH'
+    else:
+        a += '.SZ'
+    return a
 
 
 def get_db_session():
@@ -39,15 +51,16 @@ def get_db_session():
         session.close()
 
 # 图一，日期和量
-@app.get('/tushareone')
+@app.get('/tushare/pageone')
 def search(
-        page: int = Query(1, gt=0),
-        size: int = Query(50, ge=5, le=50),
-        keyword: str = Query(None),
+
+        keyword: str= Query('600050'),
         session: Session = Depends(get_db_session)
 ):
+
+    key = ts_code_or_name(keyword)
     result1 = session.execute(
-        "select `trade_date` as date, volume_ratio  from `tb_daily_basic` where `ts_code` = '600000.SH' order by `date` asc;"
+        "select `trade_date` as date, volume_ratio  from `tb_daily_basic` where `ts_code` = '" + key +"' order by `date` asc;"
     )
 
     day_x_data, day_y_data, week_x_data, week_y_data, month_x_data, month_y_data = [], [], [], [], [], []
@@ -59,18 +72,18 @@ def search(
         # , 'weekxData': week_x_data, 'weekyData': week_y_data, 'monthxData': month_x_data, 'monthyData': month_y_data}
 
 
-# 返回一个日期和一个成交额和成交量 ---> 日线，周线，月线 ---> 通过前端页面传递参数，页面的点击传递参数
-@app.get('/tushare/pageone')
-def for_one_page(table='tb_daily', ts_code='600000.SH'):
-    result = function.interface_mysql(table, ts_code, page = 1)
-    return {'ts_code': 10000, 'depts': result}
+
 
 
 # 返回一个日期和一个 股票代码，日期，开盘价，收盘价，最高价，最低价 ---> 日线，周线，月线 ---> 通过前端页面传递参数，页面的点击传递参数
 @app.get('/tushare/pagetwo')
-def for_two_page(session: Session = Depends(get_db_session)):
+def for_two_page(
+        keyword: str= Query('600050'),
+        session: Session = Depends(get_db_session)):
+    key = ts_code_or_name(keyword)
+
     result1 = session.execute(
-        "select `trade_date` as date, open, high, low, close, vol from `tb_daily` where `ts_code` = '600000.SH' order by `date` asc;"
+        "select `trade_date` as date, open, high, low, close, vol from `tb_daily` where `ts_code` = '" + key + "' order by `date` asc;"
     )
 
     day_x_data, day_y_open, day_y_high, day_y_low, day_y_close, day_vol = [], [], [], [], [], []

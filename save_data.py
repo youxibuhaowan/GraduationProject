@@ -7,6 +7,8 @@ import function
 import requests
 import models
 import time
+import database
+
 from concurrent.futures.thread import ThreadPoolExecutor
 
 number = 0
@@ -16,6 +18,9 @@ url = 'http://api.waditu.com'
 SSE_50 = function.print_stock_basic()
 length = len(SSE_50['depts'])
 SSE_50 = SSE_50['depts']
+
+
+
 
 
 # print(SSE_50['depts'])

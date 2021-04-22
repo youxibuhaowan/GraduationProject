@@ -3,7 +3,8 @@ Time:2021/4/17 11:59
 Author:中庸猿
 奋斗不止，赚钱不停    
 """
-from sqlalchemy import Column, String, DATETIME, DECIMAL, INT, Integer
+from MySQLdb.constants.FIELD_TYPE import VARCHAR
+from sqlalchemy import Column, String, DATETIME, DECIMAL, INT, Integer, DATE
 
 from database import Base
 
@@ -155,3 +156,80 @@ class Moneyflow(Base):
     net_mf_vol = Column('net_mf_vol', INT)
     net_mf_amount = Column('net_mf_amount', DECIMAL)
     sell_md_vol = Column('sell_md_vol', INT)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 从新做的数据库模型
+# 股票详细信息
+class StockPool(Base):
+
+    __tablename__ = 'tb_stockpool'
+
+    index = Column('index', Integer, primary_key=True)
+    ts_code = Column('ts_code', String(20))
+    symbol = Column(String(20))
+    name = Column('name', String(20))
+    area = Column('area', String(20))
+    industry = Column('industry', String(20))
+
+
+# 股票日线信息
+class StockBase(Base):
+
+    __tablename__ = 'tb_stockbase'
+
+    ts_code = Column('ts_code', String(255))
+    trade_date = Column(DATETIME)
+    open = Column(DECIMAL)
+    high = Column(DECIMAL)
+    low = Column('low', DECIMAL)
+    close = Column('close', DECIMAL)
+    change = Column('change', DECIMAL)
+    pct_chg = Column('pct_chg', DECIMAL)
+    vol = Column('vol', DECIMAL)
+    amount = Column('amount', DECIMAL)
+    index = Column('index', INT, primary_key=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

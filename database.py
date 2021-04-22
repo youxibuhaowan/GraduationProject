@@ -9,10 +9,16 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+# HOST = '47.98.138.168'
+# PORT = 3306
+# USER = 'root'
+# PASS = "Yupeixin.281513"
+# DB = 'tushare'
+
 HOST = 'localhost'
 PORT = 3306
 USER = 'root'
-PASS = '123456'
+PASS = "123456"
 DB = 'tushare'
 
 SQLALCHEMY_DATABASE_URL = f"mysql://{USER}:{PASS}@{HOST}:{PORT}/tushare?charset=utf8mb4"

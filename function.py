@@ -5,9 +5,18 @@ Author:中庸猿
 """
 import MySQLdb
 import uvicorn
-from datetime import datetime, date
-import json
-import database
+from concurrent.futures.thread import ThreadPoolExecutor
+from fastapi import FastAPI, Depends
+from fastapi.params import Query
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
+import function
+from database import db_session_factory
+
+from models import Daily
+from fastapi.middleware.cors import CORSMiddleware
+
+
 from database import db_session_factory
 from models import Stock_basic, Trade_cal, Daily, Daily_basic, Monthly, Weekly, Moneyflow, TradingLimit
 
@@ -233,3 +242,42 @@ def interface_mysql(table='tb_daily', ts_code='600000.SH', page = 1, host='127.0
         conn.close()
 
 # interface_mysql()
+
+
+
+# def get_db_session():
+#     session = db_session_factory()
+#     try:
+#         yield session
+#         session.commit()
+#     except SQLAlchemyError as err:
+#         print(err)
+#         session.rollback()
+#     finally:
+#         session.close()
+#
+# def ts_code_or_name(a):
+#     for i in a:
+#         if not ('0' <= i <= '9'):
+#             return a
+#         b = int(a)
+#
+#     if b > 300983:
+#         a += '.SH'
+#     else:
+#         a += '.SZ'
+#     return a
+#
+#
+# def pageone(keyword, session: Session = Depends(get_db_session)):
+#     key = ts_code_or_name(keyword)
+#     result1 = session.execute(
+#         "select `trade_date` as date, volume_ratio  from `tb_daily_basic` where `ts_code` = '" + key +"' order by `date` asc;"
+#     )
+#
+#     day_x_data, day_y_data, week_x_data, week_y_data, month_x_data, month_y_data = [], [], [], [], [], []
+#     for date, volume_ratio in result1.fetchall():
+#         day_x_data.append(date)
+#         day_y_data.append(volume_ratio)
+#
+#     return {'dayxData': day_x_data, 'dayyData': day_y_data}
