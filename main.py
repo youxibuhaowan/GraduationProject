@@ -57,7 +57,7 @@ def search(
         keyword: str= Query('600050'),
         session: Session = Depends(get_db_session)
 ):
-
+    print(keyword)
     key = ts_code_or_name(keyword)
     result1 = session.execute(
         "select `trade_date` as date, volume_ratio  from `tb_daily_basic` where `ts_code` = '" + key +"' order by `date` asc;"
