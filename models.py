@@ -1,7 +1,7 @@
 """
 Time:2021/4/17 11:59
 Author:中庸猿
-奋斗不止，赚钱不停    
+奋斗不止，赚钱不停
 """
 from MySQLdb.constants.FIELD_TYPE import VARCHAR
 from sqlalchemy import Column, String, DATETIME, DECIMAL, INT, Integer, DATE
@@ -49,18 +49,18 @@ class Daily(Base):
     vol = Column(DECIMAL)
     amount = Column(DECIMAL)
 
-    # index = Column('index', INT, primary_key=True)
-    # ts_code = Column('ts_code', String(255))
-    # trade_date = Column('trade_date', DATETIME)
-    # open = Column('open', DECIMAL)
-    # high = Column('high', DECIMAL)
-    # low = Column('low', DECIMAL)
-    # close = Column('close', DECIMAL)
-    # pre_close = Column('pre_close', DECIMAL)
-    # change = Column('change', DECIMAL)
-    # pct_chg = Column('pct_chg', DECIMAL)
-    # vol = Column('vol', DECIMAL)
-    # amount = Column('amount', DECIMAL)
+    index = Column('index', INT, primary_key=True)
+    ts_code = Column('ts_code', String(255))
+    trade_date = Column('trade_date', DATETIME)
+    open = Column('open', DECIMAL)
+    high = Column('high', DECIMAL)
+    low = Column('low', DECIMAL)
+    close = Column('close', DECIMAL)
+    pre_close = Column('pre_close', DECIMAL)
+    change = Column('change', DECIMAL)
+    pct_chg = Column('pct_chg', DECIMAL)
+    vol = Column('vol', DECIMAL)
+    amount = Column('amount', DECIMAL)
 
 
 
@@ -190,22 +190,22 @@ class Moneyflow(Base):
 
 # 从新做的数据库模型
 # 股票详细信息
-class StockPool(Base):
+class Stock_base(Base):
 
-    __tablename__ = 'tb_stockpool'
+    __tablename__ = 'tb_stock_base'
 
     index = Column('index', Integer, primary_key=True)
     ts_code = Column('ts_code', String(20))
-    symbol = Column(String(20))
+    symbol = Column('symbol', String(20))
     name = Column('name', String(20))
     area = Column('area', String(20))
     industry = Column('industry', String(20))
 
 
 # 股票日线信息
-class StockBase(Base):
+class Daily(Base):
 
-    __tablename__ = 'tb_stockbase'
+    __tablename__ = 'tb_daily'
 
     ts_code = Column('ts_code', String(255))
     trade_date = Column(DATETIME)
@@ -220,6 +220,18 @@ class StockBase(Base):
     index = Column('index', INT, primary_key=True)
 
 
+class Daily_basic(Base):
+    __tablename__ = 'tb_daily_basic'
+
+    index = Column('index', Integer, primary_key=True)
+    ts_code = Column('ts_code', String(255))
+    trade_date = Column('trade_date', DATETIME)
+    close = Column('close', DECIMAL)
+    volume_ratio = Column('volume_ratio', DECIMAL)
+    pe = Column('pe', DECIMAL)
+    pb = Column('pb', DECIMAL)
+    total_share = Column('total_share', DECIMAL)
+    total_mv = Column('total_mv', DECIMAL)
 
 
 

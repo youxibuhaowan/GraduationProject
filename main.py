@@ -14,7 +14,6 @@ from database import db_session_factory
 from models import Daily
 from fastapi.middleware.cors import CORSMiddleware
 
-
 app = FastAPI()
 
 app.add_middleware(
@@ -24,6 +23,7 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*']
 )
+
 
 # 判断接受到的参数是一个股票代码还是一个股票的名字
 def ts_code_or_name(a):
@@ -50,17 +50,18 @@ def get_db_session():
     finally:
         session.close()
 
+
 # 图一，日期和量
 @app.get('/tushare/pageone')
 def search(
 
-        keyword: str= Query('600050'),
+        keyword: str = Query('600050'),
         session: Session = Depends(get_db_session)
 ):
     print(keyword)
     key = ts_code_or_name(keyword)
     result1 = session.execute(
-        "select `trade_date` as date, volume_ratio  from `tb_daily_basic` where `ts_code` = '" + key +"' order by `date` asc;"
+        "select `trade_date` as date, volume_ratio  from `tb_daily_basic` where `ts_code` = '" + key + "' order by `date` asc;"
     )
 
     day_x_data, day_y_data, week_x_data, week_y_data, month_x_data, month_y_data = [], [], [], [], [], []
@@ -69,16 +70,13 @@ def search(
         day_y_data.append(volume_ratio)
 
     return {'dayxData': day_x_data, 'dayyData': day_y_data}
-        # , 'weekxData': week_x_data, 'weekyData': week_y_data, 'monthxData': month_x_data, 'monthyData': month_y_data}
-
-
-
+    # , 'weekxData': week_x_data, 'weekyData': week_y_data, 'monthxData': month_x_data, 'monthyData': month_y_data}
 
 
 # 返回一个日期和一个 股票代码，日期，开盘价，收盘价，最高价，最低价 ---> 日线，周线，月线 ---> 通过前端页面传递参数，页面的点击传递参数
 @app.get('/tushare/pagetwo')
 def for_two_page(
-        keyword: str= Query('600050'),
+        keyword: str = Query('600050'),
         session: Session = Depends(get_db_session)):
     key = ts_code_or_name(keyword)
 
@@ -107,8 +105,8 @@ def for_two_page(
 # 返回一个日期和一个 股票代码，日期，开盘价，收盘价，最高价，最低价 ---> 日线，周线，月线 ---> 通过前端页面传递参数，页面的点击传递参数
 @app.get('/tushare/pagefour')
 def for_two_page(table='tb_daily_basic', ts_code='600000.SH'):
-    result = function.interface_mysql(table, ts_code, page = 4)
-    return{'ts_code': '10000', 'depts': result}
+    result = function.interface_mysql(table, ts_code, page=4)
+    return {'ts_code': '10000', 'depts': result}
 
 
 @app.get('/tushare/tradingstock')
@@ -148,8 +146,6 @@ def for_trading_stock(session: Session = Depends(get_db_session)):
                 i.append(j[1])
         listend.append(i)
     return listend
-
-
 
 
 if __name__ == '__main__':
