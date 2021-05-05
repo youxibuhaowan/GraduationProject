@@ -20,7 +20,7 @@ PASS = "123456"
 DB = 'tushare_for_ali'
 # DB = 'tushare'
 
-SQLALCHEMY_DATABASE_URL = f"mysql://{USER}:{PASS}@{HOST}:{PORT}/tushare_for_ali?charset=utf8mb4"
+SQLALCHEMY_DATABASE_URL = f"mysql://{USER}:{PASS}@{HOST}:{PORT}/{DB}?charset=utf8mb4"
 # SQLALCHEMY_DATABASE_URL = "mysql+pymysql://{USER}:{PASS}@{HOST}:{PORT}/tushare_for_ali?charset=utf8mb4"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 # 获取数据库会话工厂(通过调用该对象就可以获得数据库会话对象)

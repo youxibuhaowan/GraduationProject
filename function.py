@@ -4,76 +4,23 @@ Author:中庸猿
 奋斗不止，赚钱不停    
 """
 import MySQLdb
-import uvicorn
-from concurrent.futures.thread import ThreadPoolExecutor
-from fastapi import FastAPI, Depends
-from fastapi.params import Query
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Session
-import function
-from database import db_session_factory
-
 from models import Daily
-from fastapi.middleware.cors import CORSMiddleware
-
-
 from database import db_session_factory
-from models import Stock_basic, Trade_cal, Daily, Daily_basic, Monthly, Weekly, Moneyflow, TradingLimit
+from models import Daily, DailyBasic, IndexDaily, IndexBasic, IndexDailybasic, StockBase, ThsDaily, ThsIndex
 
-def print_stock_basic():
-    #
+
+def print_mysql_data(class_tb):
+    # 查询数据
     session = db_session_factory()
-    depts = session.query(Stock_basic).all()
+    depts = session.query(class_tb).all()
     return {'ts_code': '10000', 'depts': depts}
 
 
-def print_trade_cal():
-    #
-    session = db_session_factory()
-    depts = session.query(Trade_cal).all()
-    return {'ts_code': '10000', 'depts': depts}
-
-
-def print_daily():
-    #
-    session = db_session_factory()
-    depts = session.query(Daily).all()
-    return {'ts_code': '10000', 'depts': depts}
-
-
-def print_daily_basic():
-    #
-    session = db_session_factory()
-    depts = session.query(Daily_basic).all()
-    return {'ts_code': '10000', 'depts': depts}
-
-
-def print_monthly():
-    #
-    session = db_session_factory()
-    depts = session.query(Monthly).all()
-    return {'ts_code': '10000', 'depts': depts}
-
-
-def print_weekly():
-    #
-    session = db_session_factory()
-    depts = session.query(Weekly).all()
-    return {'ts_code': '10000', 'depts': depts}
-
-
-def print_moneyflow():
-    #
-    session = db_session_factory()
-    depts = session.query(Moneyflow).all()
-    return {'ts_code': '10000', 'depts': depts}
-
-
-def insert_stock_basic(stock_basic: Stock_basic):
+def insert_mysql_data(class_tb):
     # 新增数据
     try:
         session = db_session_factory()
-        session.add(stock_basic)
+        session.add(class_tb)
         session.commit()
         return {'code': '成功'}
     except:
@@ -81,95 +28,9 @@ def insert_stock_basic(stock_basic: Stock_basic):
         return {'code': '失败'}
 
 
-def insert_trade_cal(trade_cal: Trade_cal):
-    # 新增数据
-    try:
-        session = db_session_factory()
-        session.add(trade_cal)
-        session.commit()
-        return {'code': '成功'}
-    except:
-        session.rollback()
-        return {'code': '失败'}
-
-
-def insert_daily(daily: Daily):
-    # 新增数据
-    try:
-        session = db_session_factory()
-        session.add(daily)
-        session.commit()
-        return {'code': '成功'}
-    except:
-        session.rollback()
-        return {'code': '失败'}
-
-def insert_trading_limit(trading_limit: TradingLimit):
-    # 新增数据
-    try:
-        session = db_session_factory()
-        session.add(trading_limit)
-        session.commit()
-        return {'code': '成功'}
-    except:
-        session.rollback()
-        return {'code': '失败'}
-
-
-def insert_daily_basic(daily_basic: Daily_basic):
-    # 新增数据
-    try:
-        session = db_session_factory()
-        session.add(daily_basic)
-        session.commit()
-        return {'code': '成功'}
-    except Exception as err:
-        print(err)
-        # raise err
-        session.rollback()
-        return {'code': '失败'}
-
-
-def insert_monthly(monthly: Monthly):
-    # 新增数据
-    try:
-        session = db_session_factory()
-        session.add(monthly)
-        session.commit()
-        return {'code': '成功'}
-    except:
-        session.rollback()
-        return {'code': '失败'}
-
-
-def insert_weekly(weekly: Weekly):
-    # 新增数据
-    try:
-        session = db_session_factory()
-        session.add(weekly)
-        session.commit()
-        return {'code': '成功'}
-    except Exception as err:
-        print(err)
-        session.rollback()
-        return {'code': '失败'}
-
-
-def insert_moneyflow(moneyflow: Moneyflow):
-    # 新增数据
-    try:
-        session = db_session_factory()
-        session.add(moneyflow)
-        session.commit()
-        return {'code': '成功'}
-    except:
-        session.rollback()
-        return {'code': '失败'}
-
-
-# 连接数据库的函数,执行SQL语句
+# 连接数据库的函数,执行SQL语句， 执行新增数据库数据
 def execution_mysql(mysql_sentence: str, b=None, host='127.0.0.1', port=3306, user='root', password='123456',
-                              database='tushare', charset='utf8mb4'):
+                    database='tushare', charset='utf8mb4'):
     # 第一步: 创建链接对象
     conn = MySQLdb.connect(host=host, port=port,
                            user=user, password=password,
@@ -177,15 +38,9 @@ def execution_mysql(mysql_sentence: str, b=None, host='127.0.0.1', port=3306, us
     try:
         # 第二步: 获取游标对象
         with conn.cursor() as cursor:
-            # 第三步: 通过游标对象向数据库服务器发出SQL语句
-            # cursor.execute('SQL语句')
+
             affected_rows = cursor.execute(mysql_sentence, b)
-            # 第四步: 获取查询结果（通过游标抓取数据）
-            # fetchone() ---> 抓取一条数据
-            # fetchall() ---> 抓取所有数据，嵌套元组
-            # fetchmany(n) ---> 抓取n个数据，嵌套元组
-            # row = cursor.fetchall()  # 抓取出来是一个二维元组
-            # return row
+
             conn.commit()
             print('执行成功')
 
@@ -195,11 +50,11 @@ def execution_mysql(mysql_sentence: str, b=None, host='127.0.0.1', port=3306, us
         conn.rollback()
         return 0
     finally:
-        # 第五步: 关闭连接释放资源
         conn.close()
 
 
-def interface_mysql(table='tb_daily', ts_code='600000.SH', page = 1, host='127.0.0.1', port=3306, user='root', password='123456',
+def interface_mysql(table='tb_daily', ts_code='600000.SH', page=1, host='127.0.0.1', port=3306, user='root',
+                    password='123456',
                     database='tushare', charset='utf8mb4'):
     index = 0
     list_index = []
@@ -217,7 +72,6 @@ def interface_mysql(table='tb_daily', ts_code='600000.SH', page = 1, host='127.0
         sql = "select `ts_code`, `trade_date`, `pe`, `pb` `ps` `dv_ttm` from " + table + " where ts_code = '" + ts_code + "';"
     else:
         print('我啥也不知道，这页面超了')
-
 
     # sql = "select `stade_date`, `open`, `close`, `high`, `low` from `tb_daily` where ts_code = '600000.SH' and  `index` < '10';"
     # vw = "vw_" + vw_date + "_" + vw
@@ -241,43 +95,3 @@ def interface_mysql(table='tb_daily', ts_code='600000.SH', page = 1, host='127.0
     finally:
         conn.close()
 
-# interface_mysql()
-
-
-
-# def get_db_session():
-#     session = db_session_factory()
-#     try:
-#         yield session
-#         session.commit()
-#     except SQLAlchemyError as err:
-#         print(err)
-#         session.rollback()
-#     finally:
-#         session.close()
-#
-# def ts_code_or_name(a):
-#     for i in a:
-#         if not ('0' <= i <= '9'):
-#             return a
-#         b = int(a)
-#
-#     if b > 300983:
-#         a += '.SH'
-#     else:
-#         a += '.SZ'
-#     return a
-#
-#
-# def pageone(keyword, session: Session = Depends(get_db_session)):
-#     key = ts_code_or_name(keyword)
-#     result1 = session.execute(
-#         "select `trade_date` as date, volume_ratio  from `tb_daily_basic` where `ts_code` = '" + key +"' order by `date` asc;"
-#     )
-#
-#     day_x_data, day_y_data, week_x_data, week_y_data, month_x_data, month_y_data = [], [], [], [], [], []
-#     for date, volume_ratio in result1.fetchall():
-#         day_x_data.append(date)
-#         day_y_data.append(volume_ratio)
-#
-#     return {'dayxData': day_x_data, 'dayyData': day_y_data}
