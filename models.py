@@ -18,8 +18,8 @@ from database import Base
 class Daily(Base):
     __tablename__ = 'tb_daily'
 
-    ts_code = Column('ts_code', String(255))
-    trade_date = Column(DATE)
+    ts_code = Column('ts_code', String(255), primary_key=True)
+    trade_date = Column(DATE, primary_key=True)
     open = Column(DECIMAL)
     high = Column(DECIMAL)
     low = Column(DECIMAL)
@@ -33,8 +33,8 @@ class Daily(Base):
 class DailyBasic(Base):
     __tablename__ = 'tb_daily_basic'
 
-    ts_code = Column('ts_code', String(255))
-    trade_date = Column('trade_date', DATE)
+    ts_code = Column('ts_code', String(255), primary_key=True)
+    trade_date = Column('trade_date', DATE, primary_key=True)
     close = Column('close', DECIMAL)
     volume_ratio = Column('volume_ratio', DECIMAL)
     pe = Column('pe', DECIMAL)
@@ -58,8 +58,8 @@ class IndexBasic(Base):
 class IndexDaily(Base):
     __tablename__ = 'tb_index_daily'
 
-    ts_code = Column('ts_code', String(255))
-    trade_date = Column('trade_date', DATE)
+    ts_code = Column('ts_code', String(255), primary_key=True)
+    trade_date = Column('trade_date', DATE, primary_key=True)
     open = Column('open', DECIMAL)
     close = Column('close', DECIMAL)
     high = Column('high', DECIMAL)
@@ -73,8 +73,8 @@ class IndexDaily(Base):
 class IndexDailybasic(Base):
     __tablename__ = 'tb_index_dailybasic'
 
-    ts_code = Column('ts_code', String(255))
-    trade_date = Column('trade_date', DATE)
+    ts_code = Column('ts_code', String(255), primary_key=True)
+    trade_date = Column('trade_date', DATE, primary_key=True)
     total_mv = Column('total_mv', DECIMAL)
     turnover_rate = Column('turnover_rate', DECIMAL)
     pe = Column('pe', DECIMAL)
@@ -97,8 +97,8 @@ class StockBase(Base):
 class ThsDaily(Base):
     __tablename__ = 'tb_ths_daily'
 
-    ts_code = Column('ts_code', String(255))
-    trade_date = Column('trade_date', DATE)
+    ts_code = Column('ts_code', String(255), primary_key=True)
+    trade_date = Column('trade_date', DATE, primary_key=True)
     open = Column('open', DECIMAL)
     close = Column('close', DECIMAL)
     high = Column('high', DECIMAL)
