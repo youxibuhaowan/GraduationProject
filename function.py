@@ -4,7 +4,9 @@ Author:中庸猿
 奋斗不止，赚钱不停    
 """
 import MySQLdb
+import datetime
 from models import Daily
+from re import fullmatch
 from database import db_session_factory
 from models import Daily, DailyBasic, IndexDaily, IndexBasic, IndexDailybasic, StockBase, ThsDaily, ThsIndex
 
@@ -53,10 +55,9 @@ def execution_mysql(mysql_sentence: str, b=None, host='127.0.0.1', port=3306, us
         conn.close()
 
 
-def interface_mysql(table='tb_daily', ts_code='600000.SH', page=1, host='127.0.0.1', port=3306, user='root',
+def interface_mysql(sql = '', table='tb_daily', ts_code='600000.SH', page=1, host='127.0.0.1', port=3306, user='root',
                     password='123456',
-                    database='tushare', charset='utf8mb4'):
-    index = 0
+                    database='tushare_for_ali', charset='utf8mb4'):
     list_index = []
     if page == 1:
         sql = "select `trade_date` from " + table + " where ts_code = '" + ts_code + "';"
@@ -70,6 +71,8 @@ def interface_mysql(table='tb_daily', ts_code='600000.SH', page=1, host='127.0.0
         pass
     elif page == 4:
         sql = "select `ts_code`, `trade_date`, `pe`, `pb` `ps` `dv_ttm` from " + table + " where ts_code = '" + ts_code + "';"
+    elif page == 99:
+        sql = sql
     else:
         print('我啥也不知道，这页面超了')
 
@@ -95,3 +98,17 @@ def interface_mysql(table='tb_daily', ts_code='600000.SH', page=1, host='127.0.0
     finally:
         conn.close()
 
+
+def getYesterday():
+    today = datetime.date.today()
+    oneday = datetime.timedelta(days=1)
+    yesterday = today - oneday
+    return yesterday
+
+
+def is_number(str1):
+    re_str = r'\d*'
+    if fullmatch(re_str, str1):
+        return True
+    else:
+        return False
